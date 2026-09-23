@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+:root {
+  --black: #010101;
+  --gold: #dbb44c;
+  --gold-light: #ecc35e;
+  --gold-deep: #b08e40;
+  --cream: #e8deca;
+  --burgundy: #4e1421;
+  --ink: #1a1714;
+}
+
+@theme inline {
+  --color-black: var(--black);
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-gold-deep: var(--gold-deep);
+  --color-cream: var(--cream);
+  --color-burgundy: var(--burgundy);
+  --color-ink: var(--ink);
+  --font-display: var(--font-cormorant), Georgia, serif;
+  --font-sans: var(--font-montserrat), system-ui, sans-serif;
+  --font-script: var(--font-yellowtail), cursive;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--black);
+    color: var(--cream);
+    font-family: var(--font-sans);
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.12;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* One focus style everywhere, visible on both surfaces. */
+  :focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+  }
+  .on-cream :focus-visible {
+    outline-color: var(--burgundy);
+  }
+}
+
+/* The hero seam sews itself once: a solid mask stroke is revealed with stroke-dashoffset. */
+.seam-reveal {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .seam-reveal[data-animate] {
+    stroke-dashoffset: 1;
+    animation: seam-sew 1.6s cubic-bezier(0.65, 0, 0.35, 1) 0.3s forwards;
+  }
+  @keyframes seam-sew {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
