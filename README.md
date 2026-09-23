@@ -55,7 +55,37 @@ variable, so it takes a rebuild, not just a restart.
    build time (`app/icon.tsx`, `app/apple-icon.tsx`, `app/opengraph-image.tsx`), so nothing to redo there.
 6. `npm run build`, then check at 360px and 1440px.
 
-## Deploy (leyabonas.sibuyane.co.za)
+## Deploy on DirectAdmin (or any Apache shared hosting)
+
+Shared hosting has no Node.js server, so this builds plain files instead:
+
+```bash
+npm run build:static                          # demo mode -> leyabonas-site-demo.zip
+NEXT_PUBLIC_DEMO=false npm run build:static   # live mode -> leyabonas-site-live.zip
+```
+
+The script pre-sizes every image to WebP (Vercel does this on the fly; Apache can't),
+exports the site to `out/`, drops the full-size PNGs the page no longer needs, writes an
+`.htaccess` and zips it. The `.htaccess` forces HTTPS, sends `X-Robots-Tag: noindex` in demo
+mode, serves the extensionless icon and Open Graph files as PNG, turns on gzip and sets
+long cache headers for the hashed files.
+
+1. DirectAdmin > **Subdomain Management**: add `leyabonas` under sibuyane.co.za.
+2. DirectAdmin > **SSL Certificates**: issue a Let's Encrypt certificate that includes
+   `leyabonas.sibuyane.co.za` (the `.htaccess` redirects to HTTPS, so do this first).
+3. **File Manager**: open the subdomain's folder, usually
+   `domains/sibuyane.co.za/public_html/leyabonas/`. Delete any placeholder `index.html`.
+4. Upload the zip there, then **Extract**. `index.html` and `.htaccess` must sit directly in
+   that folder, not in a subfolder. Turn on "show hidden files" to see `.htaccess`.
+5. Delete the zip and open https://leyabonas.sibuyane.co.za on a phone.
+
+To update later, rebuild, then delete the old files (keep the folder) and extract the new zip.
+
+Measured against the export served with gzip, the way Apache serves it: Performance 96 on
+three runs, Accessibility 100, Best practices 100 (Lighthouse 12, mobile). Without gzip it
+drops to about 80, so if the live site feels slow, check that `mod_deflate` is enabled.
+
+## Deploy on Vercel (leyabonas.sibuyane.co.za)
 
 1. `npx vercel` to link the project, then `npx vercel --prod`.
 2. Vercel project > **Settings > Domains**: add `leyabonas.sibuyane.co.za`.

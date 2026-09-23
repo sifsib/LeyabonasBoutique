@@ -6,3 +6,6 @@ out
 next-env.d.ts
 .env*.local
 docs/private
+public/_img
+out
+*.zip

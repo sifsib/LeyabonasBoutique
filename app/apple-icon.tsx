@@ -2,6 +2,8 @@ import { ImageResponse } from "next/og";
 import { site } from "@/content/site";
 import { logoDataUrl } from "@/lib/logo";
 
+export const dynamic = "force-static";
+
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 

@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "tsc --noEmit",
-    "placeholders": "node scripts/placeholders.mjs"
+    "build:static": "node scripts/build-static.mjs"
   },
   "dependencies": {
     "next": "^16.3.6",
